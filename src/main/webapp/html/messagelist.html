@@ -1,0 +1,116 @@
+http://127.0.0.1:8020/Hello%20Vuejs/vue-eui/message.html<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>tabbar（底部栏）</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准eui.css-->
+		<link rel="stylesheet" type="text/css" href="css/vue-eui.css"/>
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="css/app.css"/>	
+	  		
+	</head>
+	<script language="javascript" src="./js/jquery-1.6.4.min.js"></script>
+	<script language="javascript" src="./js/jquery.md5.js"></script>
+	<script language="javascript" src="./js/jquery.json-2.3.min.js?v=20150926"></script>
+<body id="app">
+	
+	<header class="eui-header">
+		<a class="eui-icon eui-icon-arrowleft eui-position-left"></a>
+		<h1 class="eui-title">message list(消息列表)</h1>
+	</header>
+	  
+	<div class="eui-wrap-page">
+	  	<div class="eui-scroller">	  		  		
+			<input type="text" id="registerUserA"/><a href="#" onclick="registerUser()">用户注册</a></br>
+			
+			<input type="text" id="bindUser"/><a href="#" onclick="bindUserFun()">用户绑定</a></br>
+			
+			<input type="text" id="loginUser"/><a href="#" onclick="loginUserFun()">用户登录</a></br>
+			
+			<input type="text" id="validMobile"/><a href="#" onclick="validMobileFun()">注册账号是否可用</a></br>
+			
+			<input type="text" id="userExists"/><a href="#" onclick="userExistsFun()">登录账户是否存在</a></br>
+			
+			<input type="text" id="sendSMS"/><a href="#" onclick="sendSMSfun()">发送短信验证码</a></br>
+	  	</div>
+	</div>
+		
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue-eui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">	
+		var example1 = new Vue({
+		  	el: '#app',
+		  	data: {
+		   	 	listdata: [
+		      		{ 
+		      			path:'#',
+		      			logo:'img/eui-chat-1.png', 
+		      			name:'智能小助手1',
+		      			time:'12:00',
+		      			msg:'我是萌萌哒的机器人',
+		      			msgnum:'1'
+		      		},
+		      		{ 
+		      			path:'#',
+		      			logo:'img/eui-chat-2.png', 
+		      			name:'智能小助手2',
+		      			time:'12:00',
+		      			msg:'我是萌萌哒的机器人,你说什么鬼？哈哈哈',
+		      			msgnum:'99+' 
+		      		}
+		    	]
+		 	}
+		});
+		
+		function registerUser(){
+			post("/fintech-api-web/",$("#registerUserA").val());
+		}
+		
+		function bindUserFun(){
+			post("/fintech-api-web/",$("#bindUser").val());
+		}
+		
+		function loginUserFun(){
+			post("/fintech-api-web/",$("#loginUser").val());
+		}
+
+		function validMobileFun(){
+			post("/fintech-api-web/",$("#validMobile").val());
+		}
+
+		function userExistsFun(){
+			post("/fintech-api-web/",$("#userExists").val());
+		}
+
+		function sendSMSfun(){
+			post("/fintech-api-web/public/sms/send",$("#sendSMS").val());
+		}		
+		
+		function post(url,data){            
+			$.ajax({
+					type: "POST",
+					url: url,
+					dataType: "json",
+					data: data, 
+					success: function (obj) {
+						if(obj.code==0)
+						{
+							$('#show').html('上传成功，图片地址：' + obj.info);
+							$('#imgshow').show();
+							$('#imgshow').attr('src', obj.info);
+						}
+						else
+						{
+							$('#show').html('上传失败 :' + obj.info);
+						}					
+					},
+					error : function(){$('#show').html('由于网络原因，上传失败。'); }
+				});  
+			}
+	</script>
+</body>
+</html>
